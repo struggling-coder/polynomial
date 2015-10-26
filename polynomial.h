@@ -1,5 +1,6 @@
 #include <simplecpp>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class Polynomial
         void print();
         double valueAt(double x);
         void plot(int xleft, int xright);
+        int terms();
 
         Polynomial derivative();
         Polynomial integral();
@@ -29,7 +31,7 @@ class Polynomial
         double maximum();
         double maximumAt();
 
-    //private:
+    private:
         int n;
         int *k; double *ak;
         double precision; //This is the equivalent of 'dx'
