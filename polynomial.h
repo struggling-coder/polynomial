@@ -29,8 +29,9 @@ class Polynomial
         double maximum();
         double maximumAt();
 
-    private:
+    //private:
         int n;
         int *k; double *ak;
+        double precision; //This is the equivalent of 'dx'
 
 };
