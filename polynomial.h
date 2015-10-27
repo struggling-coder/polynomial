@@ -9,6 +9,7 @@ class Polynomial
     public:
         //Constructors:
         Polynomial();
+        Polynomial(int _n);
         Polynomial(int i_n, int i_k[], double i_ak[]);
 
         //Default functions:

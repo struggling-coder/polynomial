@@ -2,7 +2,14 @@
 
 Polynomial::Polynomial()
 {
-    n=1;
+    n = 1;
+}
+
+Polynomial::Polynomial(int _n)
+{
+    n = _n;
+    k = new int[n];
+    ak = new double[n];
 }
 
 //Apparently, they have assured us that the polynomial is in ascending order
@@ -39,6 +46,7 @@ void Polynomial::print()
         cout << "+" << _ak << "x^" << _k;
     }
 
+    cout << endl;
 }
 
 double Polynomial::valueAt(double x)
@@ -54,7 +62,7 @@ double Polynomial::valueAt(double x)
 
 Polynomial Polynomial::operator+(Polynomial other)
 {
-    int _size = 0, blank = 0;
+    /*int _size = 0, blank = 0;
     //USE BLANK AS HANDLE TO FIND NEXT;
     for (int j = 0; j < other.terms(); j++)
     {
@@ -65,7 +73,40 @@ Polynomial Polynomial::operator+(Polynomial other)
     }
 
     _size =  n + other.n - _size;
-    int new_k[_size], new_ak[_size];
+
+    /*for (int j = 0; j < other.terms(); j++)
+    {
+        for (int l = 0; l < sizeof(k); l++)
+        {
+            if (other.k[j] == k[l])
+            {
+                new_k[blank] = k[l];
+                new_ak[blank] = ak[l] + other.ak[j];
+                blank++;
+            }
+        }
+    }
+    */
+
+    int *new_k = new int[n + other.n];
+    double *new_ak = new double[n + other.n];
 
 
+    for (int j = 0; j < other.terms(); j++ )
+    {
+        new_k[j] = other.k[j];
+        new_ak[j] = other.ak[j];
+    }
+
+    for (int j = 0; j < n; j++)
+    {
+        new_k[j+other.n] = k[j];
+        new_ak[j+other.n] = ak[j];
+    }
+
+    Polynomial tr(n + other.n);
+    tr.ak = new_ak;
+    tr.k = new_k;
+    //tr.n = n + other.n;
+    return tr;
 }
