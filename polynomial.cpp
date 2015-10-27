@@ -26,27 +26,50 @@ void Polynomial::read()
 
 }
 
-int Polynomial::terms() { return n;
-}
+int Polynomial::terms() { return n; }
 
 Polynomial::Polynomial(int i_n, int i_k[], double i_ak[])
 {
     n = i_n; k = i_k; ak = i_ak;
 }
 
-
+// Properly formatted print() function
 void Polynomial::print()
 {
-    if(k == 0) cout << ak[0] << endl;
+    if (ak[0] != 0 && k[0] == 0) cout << ak[0];
+    else if (ak[0] == 1 && k[0] != 0) cout << "x^" << k[0];
+    else if (ak[0] == 0) { /*Do nothing*/ }
     else cout  << ak[0] << "x^" << k[0] ;
     for(int q = 1; q < n; q++)
     {
         double _ak = (ak[q]);
         int _k = (k[q]);
-        cout << "+" << _ak << "x^" << _k;
-    }
-
+        if (_ak != 1)
+        {
+            if (_ak > 0)
+            {
+                if (_k != 1) cout << "+" << _ak << "x^" << _k;
+                else cout << "+" << _ak << "x";
+            }
+            else if (_ak == 0) {  }
+            else  {
+                if (_k != 1) cout << "-" << _ak << "x^" << _k;
+                else cout << "-" << _ak << "x";
+            }
+        }
+        else
+        {
+            if (_ak > 0) {
+                if (_k != 1) cout << "+" << "x^" << _k;
+                else cout << "+"  << "x";
+            }
+            else {
+                if (_k != 1) cout << "-" << "x^" << _k;
+                else cout << "-" << "x";
+            }
+        }
     cout << endl;
+    }
 }
 
 double Polynomial::valueAt(double x)
@@ -74,7 +97,7 @@ Polynomial Polynomial::operator+(Polynomial other)
 
     _size =  n + other.n - _size;
 
-    /*for (int j = 0; j < other.terms(); j++)
+    for (int j = 0; j < other.terms(); j++)
     {
         for (int l = 0; l < sizeof(k); l++)
         {
