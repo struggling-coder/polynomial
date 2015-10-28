@@ -68,8 +68,9 @@ void Polynomial::print()
                 else cout << "-" << "x";
             }
         }
-    cout << endl;
+
     }
+    cout << endl;
 }
 
 double Polynomial::valueAt(double x)
@@ -131,5 +132,67 @@ Polynomial Polynomial::operator+(Polynomial other)
     tr.ak = new_ak;
     tr.k = new_k;
     //tr.n = n + other.n;
+    return tr;
+}
+
+Polynomial Polynomial::operator-(Polynomial other)
+{
+    int *new_k = new int[n + other.n];
+    double *new_ak = new double[n + other.n];
+
+
+    for (int j = 0; j < other.terms(); j++ )
+    {
+        new_k[j] = other.k[j];
+        new_ak[j] = (-1) * other.ak[j];
+    }
+
+    for (int j = 0; j < n; j++)
+    {
+        new_k[j+other.n] = k[j];
+        new_ak[j+other.n] = ak[j];
+    }
+
+    Polynomial tr(n + other.n);
+    tr.ak = new_ak;
+    tr.k = new_k;
+    return tr;
+}
+
+Polynomial Polynomial::derivative()
+{
+    int *new_k = new int[n];
+    double *new_ak = new double[n];
+
+    for(int j = 0; j < n; j++)
+    {
+        if(k[j] == 0) { new_k[j] = 0, new_ak[j] = 0; }
+        else
+        {
+            new_k[j] = k[j] - 1;
+            new_ak[j] = ak[j] * k[j];
+        }
+    }
+
+    Polynomial tr(n);
+    tr.ak = new_ak;
+    tr.k = new_k;
+    return tr;
+}
+
+Polynomial Polynomial::integral()
+{
+    int *new_k = new int[n];
+    double *new_ak = new double[n];
+
+    for(int j = 0; j < n; j++)
+    {
+        new_k[j] = k[j] + 1;
+        new_ak[j] = ak[j] /(k[j] + 1);
+    }
+
+    Polynomial tr(n);
+    tr.ak = new_ak;
+    tr.k = new_k;
     return tr;
 }
