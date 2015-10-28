@@ -196,3 +196,38 @@ Polynomial Polynomial::integral()
     tr.k = new_k;
     return tr;
 }
+
+void Polynomial::plot(double xleft, double xright)
+{
+    //Initialize and prepare the canvas for the graph
+    initCanvas("Polynomial Plot", 1100, 600);
+    Turtle t1;
+    t1.penUp();
+    t1.forward(500); t1.right(90); t1.forward(250); t1.right(90);
+    t1.penDown(); t1.forward(1000); t1.left(180);
+    Text text1(50, 575, xleft);
+    Text text2(1050, 575, xright);
+    t1.left(90);
+
+    //Adjust PRECISION == 'dx'
+    precision = 0.1;
+    t1.penUp();
+    t1.forward(valueAt(xleft));
+    t1.right(90);
+    t1.penDown();
+
+    Polynomial dp = derivative();
+    dp.print();
+    double slope;
+
+    for(int j = 1; (j*precision + xleft) < xright*10; j++)
+    {
+        slope = atan(dp.valueAt(j*precision + xleft)) * 180 / PI * 100;
+        t1.left(slope);
+        t1.forward(precision);
+        t1.right(slope);
+        cout << slope;
+    }
+
+    wait(30);
+}
