@@ -201,6 +201,10 @@ void Polynomial::plot(double xleft, double xright)
 {
     //Initialize and prepare the canvas for the graph
     initCanvas("Polynomial Plot", 1100, 600);
+
+    //O=(50,575)
+
+    /* This seems to be a faulty approach
     Turtle t1;
     t1.penUp();
     t1.forward(500); t1.right(90); t1.forward(250); t1.right(90);
@@ -228,6 +232,34 @@ void Polynomial::plot(double xleft, double xright)
         t1.right(slope);
         cout << slope;
     }
+    */
 
     wait(30);
+}
+
+//SORTING ALGORITHM
+void Polynomial::sort()
+{
+    int temp;
+    double dtemp;
+    for(int i = 0; i < n-1;i++)
+    {
+        for(int j = i+1; j<n ; j++)
+        {
+            if(k[i] > k[j])
+            {
+                temp = k[i];
+                k[i] = k[j];
+                k[j] = temp;
+                dtemp = ak[i];
+                ak[i] = ak[j];
+                ak[j] = dtemp;
+            }
+        }
+    }
+}
+
+void Polynomial::process()
+{
+
 }

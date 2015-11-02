@@ -11,12 +11,13 @@ class Polynomial
         Polynomial();
         Polynomial(int _n);
         Polynomial(int i_n, int i_k[], double i_ak[]);
+        // Do the copy constructor: Polynomial()
 
         //Default functions:
         void read();
         void print();
         double valueAt(double x);
-        void plot(int xleft, int xright);
+        void plot(double xleft, double xright);
         int terms();
 
         Polynomial derivative();
@@ -31,6 +32,8 @@ class Polynomial
         //Additional Functions:
         double maximum();
         double maximumAt();
+        void sort();
+        void process();
 
     private:
         int n;
