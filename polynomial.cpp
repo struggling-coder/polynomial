@@ -36,6 +36,7 @@ Polynomial::Polynomial(int i_n, int i_k[], double i_ak[])
 // Properly formatted print() function
 void Polynomial::print()
 {
+    process();
     if (ak[0] != 0 && k[0] == 0) cout << ak[0];
     else if (ak[0] == 1 && k[0] != 0) cout << "x^" << k[0];
     else if (ak[0] == 0) { /*Do nothing*/ }
@@ -131,6 +132,7 @@ Polynomial Polynomial::operator+(Polynomial other)
     Polynomial tr(n + other.n);
     tr.ak = new_ak;
     tr.k = new_k;
+    tr.process();
     //tr.n = n + other.n;
     return tr;
 }
@@ -156,6 +158,7 @@ Polynomial Polynomial::operator-(Polynomial other)
     Polynomial tr(n + other.n);
     tr.ak = new_ak;
     tr.k = new_k;
+    tr.process();
     return tr;
 }
 
@@ -177,6 +180,7 @@ Polynomial Polynomial::derivative()
     Polynomial tr(n);
     tr.ak = new_ak;
     tr.k = new_k;
+    tr.process();
     return tr;
 }
 
@@ -194,6 +198,7 @@ Polynomial Polynomial::integral()
     Polynomial tr(n);
     tr.ak = new_ak;
     tr.k = new_k;
+    tr.process();
     return tr;
 }
 
@@ -201,8 +206,30 @@ void Polynomial::plot(double xleft, double xright)
 {
     //Initialize and prepare the canvas for the graph
     initCanvas("Polynomial Plot", 1100, 600);
-
+    Line m(53, -126, 53, -126+5);
     //O=(50,575)
+    Line x_axis(50,450,1050,450);
+
+    Line x_left(50,25,50,575);
+    Line x_right(1050,25,1050,575);
+    Text text1(50, 585, xleft);
+    Text text2(1050, 585, xright);
+
+    precision = 100; //Number of parts
+    double increment = (xright - xleft) / precision;
+    //Line l;
+    double ex, why;
+
+/*
+    for(int j=0; j < precision; j++)
+    {
+        ex = 50 + (xleft + (increment * j));
+        why = -450 + valueAt(xleft + (increment * j));
+        cout << "(" << ex << "," << why << ")";
+        Line l(ex, why, ex, why+5);
+    }
+
+    //(50+x, -450+y)
 
     /* This seems to be a faulty approach
     Turtle t1;
@@ -214,7 +241,6 @@ void Polynomial::plot(double xleft, double xright)
     t1.left(90);
 
     //Adjust PRECISION == 'dx'
-    precision = 0.1;
     t1.penUp();
     t1.forward(valueAt(xleft));
     t1.right(90);
@@ -261,5 +287,5 @@ void Polynomial::sort()
 
 void Polynomial::process()
 {
-
+    sort();
 }
