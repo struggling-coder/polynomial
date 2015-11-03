@@ -301,10 +301,49 @@ void Polynomial::sort()
 void Polynomial::process()
 {
     sort();
-    double zeros, duplicates;
+    double zeroes = 0, duplicates = 0;
+    int temp, p = 0, nold = n;
+    int *kt = new int[nold];
+    double *akt = new double[nold];
 
     for(int i1 = 0; i1 < n -1; i1++)
     {
-
+        temp = k[i1];
+        if(ak[i1] == 0) { zeroes++; continue;}
+        for(int j1 = i1+1; j1 < n; j1++)
+        {
+            if(k[j1] == k[i1])
+            {
+                duplicates++; i1++;
+            }
+        }
     }
+
+    //TODO: A CASE COULD BE MADE FOR zeroes individually
+
+    if ((duplicates) > 0)
+    {
+
+    kt = k; akt = ak;
+    n = n - duplicates - zeroes;
+
+    k = new int[n];
+    ak = new double[n];
+
+    for(int i1 = 0; i1 < nold -1; i1++)
+    {
+        temp = kt[i1];
+        if(akt[i1] == 0) { continue;}
+        k[p] = kt[i1];
+        ak[p] = akt[i1];
+        for(int j1 = i1+1; j1 < nold; j1++)
+        {
+            if(kt[j1] == kt[i1]) {i1++; ak[p] += akt[i1];}
+        }
+        cout << "ak: " << k[p] << ":" << ak[p] << endl;
+        p++;
+    }
+    }
+    //cout << n;
+    //cout << duplicates;
 }
