@@ -217,8 +217,9 @@ void Polynomial::plot(double xleft, double xright)
     Text text1(50, 585, xleft);
     Text text2(1050, 585, xright);
 
-    double scaleY = 6.5;
-    precision = 350; //Number of parts
+    bool condition, root;
+    double scaleY = 8;
+    precision = 400; //Number of parts
     double increment = (xright - xleft) / precision;
     double ex, ex1, why1, why, end;
 
@@ -236,11 +237,32 @@ void Polynomial::plot(double xleft, double xright)
 
         ex1 = 50 + ((xleft + (increment * j)) * (1000/xright));
         why1 = 450 - valueAt(xleft + (increment * j))*(scaleY);
+
         Line l(ex, why, ex1, why1);
         l.setColor(COLOR("blue"));
         l.imprint();
         xp.move(0,why1 - why);
         yp.move(ex1 - ex, 0);
+
+        //flash at extrema
+        if (j > 0 && (((why1 - why) / (ex1 - ex) > 0) != condition))
+        {
+            xp.setColor(COLOR("red"));
+            xp.imprint();
+            xp.setColor(COLOR(128,128,128));
+        }
+
+        //mark the roots
+        if (((450-why) * (450 -why1) < 0))
+        {
+            Circle c(ex1, why1, 5);
+            c.setColor(COLOR("green"));
+            c.setFill(true);
+            c.imprint();
+        }
+
+        root = (why > 0);
+        condition = ((why1 - why) / (ex1 - ex) > 0);
         ex = ex1; why = why1;
     }
 
@@ -321,6 +343,24 @@ void Polynomial::process()
 
     //TODO: A CASE COULD BE MADE FOR zeroes individually
 
+    /*if(duplicates == 0 && zeroes > 0)
+    {
+        cout << "BOOM";
+        kt = k; akt = ak;
+        n = n - zeroes;
+        p = 0;
+        k =  new int[n];
+        ak = new double[n];
+
+        for(int i1 = 0; i1 < nold -1; i1++)
+        {
+            temp = kt[i1];
+            if(akt[i1] == 0) { continue;}
+            k[p] = kt[i1];
+            ak[p] = akt[i1];
+        }
+    }*/
+
     if ((duplicates) > 0)
     {
 
@@ -333,17 +373,15 @@ void Polynomial::process()
     for(int i1 = 0; i1 < nold -1; i1++)
     {
         temp = kt[i1];
-        if(akt[i1] == 0) { continue;}
+        if(akt[i1] == 0) { i1++;}
         k[p] = kt[i1];
         ak[p] = akt[i1];
         for(int j1 = i1+1; j1 < nold; j1++)
         {
             if(kt[j1] == kt[i1]) {i1++; ak[p] += akt[i1];}
         }
-        cout << "ak: " << k[p] << ":" << ak[p] << endl;
+        //cout << "ak: " << k[p] << ":" << ak[p] << endl;
         p++;
     }
     }
-    //cout << n;
-    //cout << duplicates;
 }

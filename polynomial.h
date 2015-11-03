@@ -38,6 +38,7 @@ class Polynomial
     private:
         int n;
         int *k; double *ak;
+        double root;
         double precision; //This is the equivalent of 'dx'
 
 };
