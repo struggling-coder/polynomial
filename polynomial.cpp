@@ -39,13 +39,14 @@ void Polynomial::print()
     process();
     if (ak[0] != 0 && k[0] == 0) cout << ak[0];
     else if (ak[0] == 1 && k[0] != 0) cout << "x^" << k[0];
+    else if (ak[0] == -1 && k[0] != 0) cout << "x^" << k[0];
     else if (ak[0] == 0) { /*Do nothing*/ }
     else cout  << ak[0] << "x^" << k[0] ;
     for(int q = 1; q < n; q++)
     {
         double _ak = (ak[q]);
         int _k = (k[q]);
-        if (_ak != 1)
+        if (_ak != 1 && _ak != -1)
         {
             if (_ak > 0)
             {
@@ -54,8 +55,8 @@ void Polynomial::print()
             }
             else if (_ak == 0) {  }
             else  {
-                if (_k != 1) cout << "-" << _ak << "x^" << _k;
-                else cout << "-" << _ak << "x";
+                if (_k != 1) cout << _ak << "x^" << _k;
+                else cout << _ak << "x";
             }
         }
         else
@@ -79,7 +80,7 @@ double Polynomial::valueAt(double x)
     double sum = 0;
     for (int j = 0; j < n; j++)
     {
-        sum = sum + ((ak[0]) * pow(x, k[0]));
+        sum = sum + ((ak[j]) * pow(x, k[j]));
     }
 
     return sum;
@@ -205,9 +206,10 @@ Polynomial Polynomial::integral()
 void Polynomial::plot(double xleft, double xright)
 {
     //Initialize and prepare the canvas for the graph
-    initCanvas("Polynomial Plot", 1100, 600);
-    Line m(53, -126, 53, -126+5);
+    initCanvas("Polynomial Plot", 1100, 650);
     //O=(50,575)
+    //(50+x, -450+y)
+
     Line x_axis(50,450,1050,450);
 
     Line x_left(50,25,50,575);
@@ -215,21 +217,32 @@ void Polynomial::plot(double xleft, double xright)
     Text text1(50, 585, xleft);
     Text text2(1050, 585, xright);
 
-    precision = 100; //Number of parts
+    double scaleY = 6.5;
+    precision = 350; //Number of parts
     double increment = (xright - xleft) / precision;
-    //Line l;
-    double ex, why;
+    double ex, ex1, why1, why, end;
 
-/*
+    end = valueAt(xright);
+    ex = 50+xleft; why =  450 - valueAt(xleft);
+    Line xp(50, why, 1050, why);
+    Line yp(ex, 0, ex, 630);
+    xp.setColor(COLOR(128,128,128));
+    yp.setColor(COLOR(128,128,128));
+
     for(int j=0; j < precision; j++)
     {
-        ex = 50 + (xleft + (increment * j));
-        why = -450 + valueAt(xleft + (increment * j));
-        cout << "(" << ex << "," << why << ")";
-        Line l(ex, why, ex, why+5);
-    }
+        if(why < -900) {Text ov(1000,100, "OVERFLOW"); break;  }     //Overflow is not good for health
+        if(why > 5000) { Text ov(1000,100, "OVERFLOW"); break; }
 
-    //(50+x, -450+y)
+        ex1 = 50 + ((xleft + (increment * j)) * (1000/xright));
+        why1 = 450 - valueAt(xleft + (increment * j))*(scaleY);
+        Line l(ex, why, ex1, why1);
+        l.setColor(COLOR("blue"));
+        l.imprint();
+        xp.move(0,why1 - why);
+        yp.move(ex1 - ex, 0);
+        ex = ex1; why = why1;
+    }
 
     /* This seems to be a faulty approach
     Turtle t1;
@@ -288,4 +301,10 @@ void Polynomial::sort()
 void Polynomial::process()
 {
     sort();
+    double zeros, duplicates;
+
+    for(int i1 = 0; i1 < n -1; i1++)
+    {
+
+    }
 }
