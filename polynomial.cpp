@@ -12,7 +12,14 @@ Polynomial::Polynomial(int _n)
     ak = new double[n];
 }
 
-//Apparently, they have assured us that the polynomial is in ascending order
+//Copy constructor
+Polynomial::Polynomial(const Polynomial &source)
+{
+    n = source.n;
+    ak = source.ak;
+    k = source.k;
+}
+
 void Polynomial::read()
 {
     cin >> n;
@@ -203,6 +210,7 @@ Polynomial Polynomial::integral()
     return tr;
 }
 
+//For a cool graph, try: 0.5x^3-3x^2+4
 void Polynomial::plot(double xleft, double xright)
 {
     //Initialize and prepare the canvas for the graph
@@ -232,7 +240,7 @@ void Polynomial::plot(double xleft, double xright)
 
     for(int j=0; j < precision; j++)
     {
-        if(why < -900) {Text ov(1000,100, "OVERFLOW"); break;  }     //Overflow is not good for health
+        if(why < -900) {Text ov(1000,100, "OVERFLOW"); break;  }     //Overflowing is not good for health
         if(why > 5000) { Text ov(1000,100, "OVERFLOW"); break; }
 
         ex1 = 50 + ((xleft + (increment * j)) * (1000/xright));
@@ -370,7 +378,7 @@ void Polynomial::process()
     k = new int[n];
     ak = new double[n];
 
-    for(int i1 = 0; i1 < nold -1; i1++)
+    for(int i1 = 0; i1 < nold; i1++)
     {
         temp = kt[i1];
         if(akt[i1] == 0) { i1++;}
@@ -380,8 +388,45 @@ void Polynomial::process()
         {
             if(kt[j1] == kt[i1]) {i1++; ak[p] += akt[i1];}
         }
-        //cout << "ak: " << k[p] << ":" << ak[p] << endl;
+//        cout << "ak: " << k[p] << ":" << ak[p] << endl;
         p++;
     }
     }
 }
+
+    double Polynomial::root(double xleft, double xright)
+    {
+        double mid, epsilon = 1.0E-10;
+        bool sign = (valueAt(xleft) > 0);
+        while((xright - xleft) > epsilon)
+        {
+            mid = (xright + xleft) / 2.0;
+            if(valueAt(mid)==0) return mid;
+            if(sign == (valueAt(mid) > 0)) xleft = mid;
+            else xright = mid;
+        }
+        return xleft;
+    }
+
+    Polynomial Polynomial::operator*(Polynomial other)
+    {
+        int *new_k = new int[n * other.n];
+        double *new_ak = new double[n * other.n];
+        int p=0;
+
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < other.n; j++)
+            {
+                new_k[p] = k[i] + other.k[j];
+                new_ak[p] = ak[i] * other.ak[j];
+                p++;
+            }
+        }
+
+        Polynomial tr(n * other.n);
+        tr.ak = new_ak;
+        tr.k = new_k;
+        //tr.process();
+        return tr;
+    }

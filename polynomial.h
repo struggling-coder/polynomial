@@ -11,7 +11,7 @@ class Polynomial
         Polynomial();
         Polynomial(int _n);
         Polynomial(int i_n, int i_k[], double i_ak[]);
-        // Do the copy constructor: Polynomial()
+        Polynomial(const Polynomial &source);
 
         //Default functions:
         void read();
@@ -22,7 +22,7 @@ class Polynomial
 
         Polynomial derivative();
         Polynomial integral();
-        double root();
+        double root(double xleft, double xright);
 
         Polynomial operator+(Polynomial other);
         Polynomial operator*(Polynomial other);
@@ -30,15 +30,11 @@ class Polynomial
         Polynomial operator-(Polynomial other);
 
         //Additional Functions:
-        double maximum();
-        double maximumAt();
         void sort();
         void process();
 
     private:
         int n;
         int *k; double *ak;
-        double root;
         double precision; //This is the equivalent of 'dx'
-
 };
