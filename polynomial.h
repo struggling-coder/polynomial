@@ -1,3 +1,5 @@
+// ROLL NUMBER: 150260005
+
 #include <simplecpp>
 #include <iostream>
 #include <cmath>
@@ -26,7 +28,7 @@ class Polynomial
 
         Polynomial operator+(Polynomial other);
         Polynomial operator*(Polynomial other);
-        Polynomial operator/(Polynomial other);
+        Polynomial operator/(Polynomial &other);
         Polynomial operator-(Polynomial other);
 
         //Additional Functions:

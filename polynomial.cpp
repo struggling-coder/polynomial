@@ -1,3 +1,5 @@
+// ROLL NUMBER 150260005
+
 #include "polynomial.h"
 
 Polynomial::Polynomial()
@@ -46,7 +48,7 @@ void Polynomial::print()
     process();
     if (ak[0] != 0 && k[0] == 0) cout << ak[0];
     else if (ak[0] == 1 && k[0] != 0) cout << "x^" << k[0];
-    else if (ak[0] == -1 && k[0] != 0) cout << "x^" << k[0];
+    else if (ak[0] == -1 && k[0] != 0) cout << "-x^" << k[0];
     else if (ak[0] == 0) { /*Do nothing*/ }
     else cout  << ak[0] << "x^" << k[0] ;
     for(int q = 1; q < n; q++)
@@ -57,8 +59,8 @@ void Polynomial::print()
         {
             if (_ak > 0)
             {
-                if (_k != 1) cout << "+" << _ak << "x^" << _k;
-                else cout << "+" << _ak << "x";
+                if (_k != 1) cout << " + " << _ak << "x^" << _k;
+                else cout << " + " << _ak << "x";
             }
             else if (_ak == 0) {  }
             else  {
@@ -69,12 +71,12 @@ void Polynomial::print()
         else
         {
             if (_ak > 0) {
-                if (_k != 1) cout << "+" << "x^" << _k;
-                else cout << "+"  << "x";
+                if (_k != 1) cout << " + " << "x^" << _k;
+                else cout << " + "  << "x";
             }
             else {
-                if (_k != 1) cout << "-" << "x^" << _k;
-                else cout << "-" << "x";
+                if (_k != 1) cout << " - " << "x^" << _k;
+                else cout << " - " << "x";
             }
         }
 
@@ -209,8 +211,10 @@ Polynomial Polynomial::integral()
     tr.process();
     return tr;
 }
+ ///////////////////////////////////////////////////////
+ //For a cool graph, try: 0.5x^3-3x^2+4
+ ///////////////////////////////////////////////////////
 
-//For a cool graph, try: 0.5x^3-3x^2+4
 void Polynomial::plot(double xleft, double xright)
 {
     //Initialize and prepare the canvas for the graph
@@ -226,13 +230,13 @@ void Polynomial::plot(double xleft, double xright)
     Text text2(1050, 585, xright);
 
     bool condition, root;
-    double scaleY = 8;
+    double scaleY = 6.5;
     precision = 400; //Number of parts
     double increment = (xright - xleft) / precision;
     double ex, ex1, why1, why, end;
 
     end = valueAt(xright);
-    ex = 50+xleft; why =  450 - valueAt(xleft);
+    ex = 50; why =  450 - valueAt(xleft);
     Line xp(50, why, 1050, why);
     Line yp(ex, 0, ex, 630);
     xp.setColor(COLOR(128,128,128));
@@ -243,9 +247,9 @@ void Polynomial::plot(double xleft, double xright)
         if(why < -900) {Text ov(1000,100, "OVERFLOW"); break;  }     //Overflowing is not good for health
         if(why > 5000) { Text ov(1000,100, "OVERFLOW"); break; }
 
-        ex1 = 50 + ((xleft + (increment * j)) * (1000/xright));
+        ex1 = 50 + (((increment * j) * 1000)/(xright - xleft));
         why1 = 450 - valueAt(xleft + (increment * j))*(scaleY);
-
+        cout << why1;
         Line l(ex, why, ex1, why1);
         l.setColor(COLOR("blue"));
         l.imprint();
@@ -394,6 +398,10 @@ void Polynomial::process()
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+/////       USES BISECTION METHOD
+////////////////////////////////////////////////////////////////////////////////////////
+
     double Polynomial::root(double xleft, double xright)
     {
         double mid, epsilon = 1.0E-10;
@@ -430,3 +438,41 @@ void Polynomial::process()
         //tr.process();
         return tr;
     }
+
+///////////////////////////////////////////////////////////////////////
+//            USES SYNTHETIC DIVISION
+///////////////////////////////////////////////////////////////////////
+
+Polynomial Polynomial::operator/(Polynomial &other)
+{
+    sort();
+    other.sort();
+    double d = other.root(-1000,1000); // (Got linear divisor)
+
+    int _n = k[n-1];
+    int *new_k = new int[_n];
+    double *new_ak = new double[_n];
+    //double *new_ak_ = new double[_n - 1];
+    double *oldc = new double[_n+1];
+
+    for(int j = 0; j < _n+1; j++) {oldc[j] = 0;}
+
+    for(int j = 0; j < n; j++)
+    {
+        oldc[k[j]] = ak[j];
+    }
+
+    new_ak[0] = oldc[0];
+    new_k[0] = (_n - 1);
+
+    for(int j = 1; j < (_n); j++)
+    {
+        new_ak[j] = ((new_ak[j-1] * d) + oldc[n - 1 - j]);
+        new_k[j] = (_n - 1) - j;
+    }
+
+    Polynomial tr(_n);
+    tr.ak = new_ak;
+    tr.k = new_k;
+    return tr;
+}
